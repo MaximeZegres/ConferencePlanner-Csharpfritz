@@ -7,8 +7,6 @@ namespace ConferenceDTO
 {
     public class Track
     {
-        public class Track
-        {
             public int TrackID { get; set; }
 
             [Required]
@@ -17,6 +15,5 @@ namespace ConferenceDTO
             [Required]
             [StringLength(200)]
             public string Name { get; set; }
-        }
     }
 }

@@ -5,8 +5,6 @@ using System.Text;
 
 namespace ConferenceDTO
 {
-    public class Tag
-    {
         public class Tag
         {
             public int ID { get; set; }
@@ -15,5 +13,4 @@ namespace ConferenceDTO
             [StringLength(32)]
             public string Name { get; set; }
         }
-    }
 }

@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Data
 {
-    public class Speaker : ConferenceDTO.Speaker
+    public class Track : ConferenceDTO.Track
     {
-        public virtual ICollection<SessionSpeaker> SessionSpeakers { get; set; } = new List<SessionSpeaker>();
+        [Required]
+        public Conference Conference { get; set; }
+
+        public virtual ICollection<Session> Sessions { get; set; }
     }
 }
