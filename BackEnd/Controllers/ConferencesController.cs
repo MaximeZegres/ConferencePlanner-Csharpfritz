@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackEnd.Data;
 using ConferenceDTO;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackEnd.Controllers
 {
@@ -65,7 +66,7 @@ namespace BackEnd.Controllers
 
             using (var stream = file.OpenReadStream())
             {
-                await loader.LoadDataAsync(conferenceName, stream, _db);
+                await loader.LoadDataAsync(conferenceName, stream, _context);
             }
 
             await _context.SaveChangesAsync();
