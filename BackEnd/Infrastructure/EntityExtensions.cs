@@ -7,22 +7,85 @@ namespace BackEnd.Data
 {
     public static class EntityExtensions
     {
-        // Act like a viewModel and map between the model and what will be represented to the front.
-        public static ConferenceDTO.SpeakerResponse MapSpeakerResponse(this Speaker speaker) =>
-            new ConferenceDTO.SpeakerResponse
+        // Act like a viewModel and map between the model and what will be represented to the API front.
+
+
+        public static ConferenceDTO.SessionResponse MapSessionResponse(this Session session) =>
+        new ConferenceDTO.SessionResponse
+        {
+            ID = session.ID,
+            Title = session.Title,
+            StartTime = session.StartTime,
+            EndTime = session.EndTime,
+            Tags = session.SessionTags?
+                          .Select(st => new ConferenceDTO.Tag
+                          {
+                              ID = st.TagID,
+                              Name = st.Tag.Name
+                          })
+                           .ToList(),
+            Speakers = session.SessionSpeakers?
+                              .Select(ss => new ConferenceDTO.Speaker
+                              {
+                                  ID = ss.SpeakerId,
+                                  Name = ss.Speaker.Name
+                              })
+                               .ToList(),
+            TrackId = session.TrackId,
+            Track = new ConferenceDTO.Track
             {
-                ID = speaker.ID,
-                Name = speaker.Name,
-                Bio = speaker.Bio,
-                WebSite = speaker.WebSite,
-                Sessions = speaker.SessionSpeakers?
-                    .Select(ss =>
+                TrackID = session?.TrackId ?? 0,
+                Name = session.Track?.Name
+            },
+            ConferenceID = session.ConferenceID,
+            Abstract = session.Abstract
+        };
+
+
+
+        public static ConferenceDTO.SpeakerResponse MapSpeakerResponse(this Speaker speaker) =>
+                new ConferenceDTO.SpeakerResponse
+                {
+                    ID = speaker.ID,
+                    Name = speaker.Name,
+                    Bio = speaker.Bio,
+                    WebSite = speaker.WebSite,
+                    Sessions = speaker.SessionSpeakers?
+                        .Select(ss =>
+                            new ConferenceDTO.Session
+                            {
+                                ID = ss.SessionId,
+                                Title = ss.Session.Title
+                            })
+                        .ToList()
+                };
+
+
+        public static ConferenceDTO.AttendeeResponse MapAttendeeResponse(this Attendee attendee) =>
+            new ConferenceDTO.AttendeeResponse
+            {
+                ID = attendee.ID,
+                FirstName = attendee.FirstName,
+                LastName = attendee.LastName,
+                UserName = attendee.UserName,
+                Sessions = attendee.SessionsAttendees?
+                    .Select(s =>
                         new ConferenceDTO.Session
                         {
-                            ID = ss.SessionId,
-                            Title = ss.Session.Title
+                            ID = s.SessionID,
+                            Title = s.Session.Title,
+                            StartTime = s.Session.StartTime,
+                            EndTime = s.Session.EndTime
                         })
-                    .ToList()
+                    .ToList(),
+                Conferences = attendee.ConferenceAttendees?
+                    .Select(ca =>
+                        new ConferenceDTO.Conference
+                        {
+                            ID = ca.ConferenceID,
+                            Name = ca.Conference.Name
+                        })
+                    .ToList(),
             };
     }
 }
