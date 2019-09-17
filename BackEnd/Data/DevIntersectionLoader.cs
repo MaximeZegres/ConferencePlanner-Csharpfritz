@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+using BackEnd.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace BackEnd.Data
+namespace BackEnd
 {
     public class DevIntersectionLoader : DataLoader
     {
