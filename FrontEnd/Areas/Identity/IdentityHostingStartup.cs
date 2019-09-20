@@ -1,4 +1,5 @@
 ﻿using System;
+using FrontEnd.Areas.Identity.Data;
 using FrontEnd.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -19,10 +20,10 @@ namespace FrontEnd.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("IdentityDbContextConnection")));
 
-                services.AddDefaultIdentity<IdentityUser>()
+                services.AddDefaultIdentity<User>()
                     .AddEntityFrameworkStores<IdentityDbContext>();
 
-                services.AddDefaultIdentity<IdentityUser>()
+                services.AddDefaultIdentity<User>()
                     .AddDefaultUI(UIFramework.Bootstrap4)
                     .AddEntityFrameworkStores<IdentityDbContext>();
             });

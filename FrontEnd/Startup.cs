@@ -59,6 +59,8 @@ namespace FrontEnd
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseAuthentication();
+
             app.UseMvc();
         }
     }
