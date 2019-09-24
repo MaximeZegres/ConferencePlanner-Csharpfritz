@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FrontEnd.Areas.Identity.Data
+namespace FrontEnd.Data
 {
     public class User : IdentityUser
     {

@@ -4,18 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FrontEnd.Services
 {
-    public class AdminService
+    public class AdminService : IAdminService
     {
         private readonly Lazy<long> _creationKey = new Lazy<long>(() => BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 7));
-        private readonly IdentityDbContext _dbContext;
+        private readonly IServiceProvider _serviceProvider;
         private bool _adminExists;
 
-        public AdminService(IdentityDbContext dbContext)
+        public AdminService(IServiceProvider serviceProvider)
         {
-            _dbContext = dbContext;
+            _serviceProvider = serviceProvider;
         }
 
         public long CreationKey => _creationKey.Value;
@@ -28,15 +29,20 @@ namespace FrontEnd.Services
             }
             else
             {
-                if (await _dbContext.Users.AnyAsync(user => user.IsAdmin))
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    // There are already admin users so disable admin creation
-                    _adminExists = true;
-                    return false;
-                }
+                    var dbContext = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
 
-                // There are no admin users so enable admin creation
-                return true;
+                    if (await dbContext.Users.AnyAsync(user => user.IsAdmin))
+                    {
+                        // There are already admin users so disable admin creation
+                        _adminExists = true;
+                        return false;
+                    }
+
+                    // There are no admin users so enable admin creation
+                    return true;
+                }
             }
         }
     }
