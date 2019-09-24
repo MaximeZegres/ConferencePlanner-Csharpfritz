@@ -29,7 +29,8 @@ namespace FrontEnd.Areas.Identity
                     options.Password.RequireNonAlphanumeric = false;
                 })
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<IdentityDbContext>();                 
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddClaimsPrincipalFactory<ClaimsPrincipalFactory>();
             });
         }
     }
