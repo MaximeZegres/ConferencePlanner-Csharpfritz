@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FrontEnd.Filters;
 using FrontEnd.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,8 @@ namespace FrontEnd
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddTransient<RequireLoginFilter>();
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy =>
@@ -46,15 +49,17 @@ namespace FrontEnd
                 client.BaseAddress = new Uri(Configuration["serviceUrl"]);
             });
 
-            services.AddSingleton<IAdminService, AdminService>();
-
-            services.AddMvc()
+            services.AddMvc(options =>
+            {
+                options.Filters.AddService<RequireLoginFilter>();
+            })
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Admin", "Admin");
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSingleton<IAdminService, AdminService>();
 
         }
 
