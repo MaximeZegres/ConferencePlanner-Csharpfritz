@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FrontEnd.Data;
 using FrontEnd.Filters;
+using FrontEnd.HealthChecks;
 using FrontEnd.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -59,6 +61,10 @@ namespace FrontEnd
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddHealthChecks()
+                .AddCheck<BackendHealthCheck>("backend")
+                .AddDbContextCheck<IdentityDbContext>();
+
             services.AddSingleton<IAdminService, AdminService>();
 
         }
@@ -76,6 +82,8 @@ namespace FrontEnd
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseHealthChecks("/health");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
